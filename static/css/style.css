@@ -1,0 +1,250 @@
+body {
+    background-color: #fff;
+    font-family: 'Karla', sans-serif;
+}
+
+.intro-section {
+    background-image: url("../img/login.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 75px 95px;
+    min-height: 100vh;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+}
+
+@media (max-width: 991px) {
+    .intro-section {
+        padding-left: 50px;
+        padding-rigth: 50px;
+    }
+}
+
+@media (max-width: 767px) {
+    .intro-section {
+        padding: 28px;
+    }
+}
+
+@media (max-width: 575px) {
+    .intro-section {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .brand-wrapper {
+        margin-bottom: 35px;
+    }
+}
+
+.intro-content-wrapper {
+    width: 410px;
+    max-width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+@media (max-width: 767px) {
+    .intro-section-footer {
+        margin-top: 35px;
+    }
+}
+
+.intro-section-footer .footer-nav a {
+    font-size: 20px;
+    font-weight: bold;
+    color: inherit;
+}
+
+@media (max-width: 767px) {
+    .intro-section-footer .footer-nav a {
+        font-size: 14px;
+    }
+}
+
+.intro-section-footer .footer-nav a+a {
+    margin-left: 30px;
+}
+
+.form-section {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+
+@media (max-width: 767px) {
+    .form-section {
+        padding: 35px;
+    }
+}
+
+.login-wrapper {
+    width: 300px;
+    max-width: 100%;
+}
+
+@media (max-width: 575px) {
+    .login-wrapper {
+        width: 100%;
+    }
+}
+
+.login-wrapper .form-control {
+    border: 0;
+    color: #145858;
+    border-bottom: 1px solid #e7e7e7;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 15px 10px;
+    margin-bottom: 7px;
+}
+
+.login-wrapper .form-control::-webkit-input-placeholder {
+    color: #b0adad;
+}
+
+.login-wrapper .form-control::-moz-placeholder {
+    color: #b0adad;
+}
+
+.login-wrapper .form-control:-ms-input-placeholder {
+    color: #b0adad;
+}
+
+.login-wrapper .form-control::-ms-input-placeholder {
+    color: #b0adad;
+}
+
+.login-wrapper .form-control::placeholder {
+    color: #b0adad;
+}
+
+.login-title {
+    font-size: 30px;
+    font-weight: bold;
+    color:#145858;
+    margin-bottom: 30px;
+}
+
+.login-btn {
+    padding: 13px 30px;
+    background-color:#f7b318;;
+    border-radius: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.login-btn:hover {
+    border: 1px solid #f7b318;;
+    background-color: transparent;
+    color: #f7b318;;
+}
+
+.forgot-password-link {
+    font-size: 14px;
+    color: #080808;
+    text-decoration: underline;
+}
+
+.social-login-title {
+    font-size: 15px;
+    color: #919aa3;
+    display: -webkit-box;
+    display: flex;
+    margin-bottom: 23px;
+}
+
+.social-login-title::before,
+.social-login-title::after {
+    content: "";
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#f4f4f4));
+    background-image: linear-gradient(#f4f4f4, #f4f4f4);
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    background-size: calc(100% - 20px) 1px;
+    background-repeat: no-repeat;
+}
+
+.social-login-title::before {
+    background-position: center left;
+}
+
+.social-login-title::after {
+    background-position: center right;
+}
+
+.social-login-links {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.social-login-link img {
+    width: 40px;
+    height: 40px;
+    -o-object-fit: contain;
+    object-fit: contain;
+}
+
+.social-login-link+.socia-login-link {
+    margin-left: 16px;
+}
+
+.login-wrapper-footer-text {
+    font-size: 14px;
+    text-align: center;
+}
+
+.flexMain {
+    display:flex;
+    align-items: center
+  }
+  .flex1 { flex:1 }
+  .flex2 { flex:2 }
+  .flex3 { flex:3 }
+  
+  button.siteLink {
+    margin-left:-5px;
+    border:none;
+    padding:24px;
+    display:inline-block;
+    min-width:115px;
+  }
+  .whiteLink {
+    background : #fff;
+  }
+  .whiteLink:active {
+    background : #f7b318;
+    color: #fff;
+  }
+  .blackLink {
+    color: #fff;
+    background:#f7b318;
+    transition: all 300ms linear;
+  }
+  
+  .blackLink:active {
+    color: #f7b318;
+    background:#fff
+  }
+  #siteBrand {
+    font-family: impact;
+    letter-spacing : -1px;
+    font-size:32px;
+    color:#145858;
+    line-height : 1em;
+  }
+
+  .fa-times {
+    cursor : pointer
+  }
+  

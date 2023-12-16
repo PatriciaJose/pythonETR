@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'nav.html' %}
+<div class="container">
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <p class="h2">WalletWise Management</p>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-primary" id="addExpenseModalBtn" data-bs-toggle="modal"
+                        data-bs-target="#addExpenseModal">
+                        Add Expense
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Expense Modal -->
+    <div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addExpenseModalLabel">Add Expense</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addExpenseForm">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input type="number" class="form-control" id="amount" name="amount" required>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">Save Expense</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-body">
+            {% if error %}
+            <p style="color: red;">{{ error }}</p>
+            {% endif %}
+            <table id='table_id' class='display mx'>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses %}
+                    <tr>
+                        <td>{{ expense[2] }}</td>
+                        <td>{{ expense[3] }}</td>
+                        <td>{{ expense[4].strftime('%B %d, %Y %H:%M:%S') }}</td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm"><i class="fa-solid fa-pen-to-square"></i>
+                                Edit</button>
+                            <a href="" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#table_id').DataTable();
+
+            $('#addExpenseModalBtn').click(function () {
+                $('#addExpenseModal').modal('show');
+            });
+
+            $('#addExpenseForm').submit(function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: '/add_expense',
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        $('#addExpenseModal').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message,
+                            confirmButtonColor: 'green',
+                        }).then(function () {
+                            location.reload();
+                        });
+                    },
+
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</div>
+{% endblock %}
