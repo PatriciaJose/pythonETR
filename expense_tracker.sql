@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2023 at 10:18 AM
+-- Generation Time: Dec 19, 2023 at 11:58 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -40,9 +40,9 @@ CREATE TABLE `expenses` (
 --
 
 INSERT INTO `expenses` (`id`, `user_id`, `title`, `amount`, `date`) VALUES
-(1, 1, 'Tricycle Transportation', 50, '2023-12-16 09:10:44'),
+(1, 1, 'Tricycle Transportation', 50, '2023-12-19 10:53:39'),
 (2, 1, 'Shopee', 120, '2023-12-16 09:10:55'),
-(3, 1, 'Lunch', 45, '2023-12-16 09:16:36');
+(4, 1, 'Iced Coffee', 210, '2023-12-19 10:56:44');
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
