@@ -99,7 +99,50 @@ def add_expense():
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
+    
+# Edit Expense
+@app.route('/edit_expense/<int:expense_id>', methods=['POST'])
+def edit_expense(expense_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
 
+    user_id = session['user_id']
+    try:
+        title = request.form.get('editTitle')
+        amount = request.form.get('editAmount')
+
+        if not title or not amount:
+            return jsonify({'status': 'error', 'message': 'All fields are required'})
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("UPDATE expenses SET title = %s, amount = %s WHERE id = %s AND user_id = %s",
+                       (title, amount, expense_id, user_id))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'status': 'success', 'message': 'Expense updated successfully'})
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
+
+#delete expense
+@app.route('/delete_expense/<int:expense_id>', methods=['POST'])
+def delete_expense(expense_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("DELETE FROM expenses WHERE id = %s AND user_id = %s",
+                       (expense_id, user_id))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'status': 'success', 'message': 'Expense deleted successfully'})
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
 
 @app.errorhandler(404)
 def page_not_found(error):

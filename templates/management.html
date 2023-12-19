@@ -45,6 +45,33 @@
             </div>
         </div>
     </div>
+    <!-- Edit Expense Modal -->
+    <div class="modal fade" id="editExpenseModal" tabindex="-1" aria-labelledby="editExpenseModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editExpenseModalLabel">Edit Expense</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editExpenseForm">
+                        <div class="mb-3">
+                            <label for="editTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="editTitle" name="editTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAmount" class="form-label">Amount</label>
+                            <input type="number" class="form-control" id="editAmount" name="editAmount" required>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <div class="card">
@@ -55,6 +82,7 @@
             <table id='table_id' class='display mx'>
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Title</th>
                         <th>Amount</th>
                         <th>Date</th>
@@ -64,13 +92,22 @@
                 <tbody>
                     {% for expense in expenses %}
                     <tr>
+                        <td>{{ expense[0] }}</td>
                         <td>{{ expense[2] }}</td>
                         <td>{{ expense[3] }}</td>
                         <td>{{ expense[4].strftime('%B %d, %Y %H:%M:%S') }}</td>
                         <td>
-                            <button type="button" class="btn btn-info btn-sm"><i class="fa-solid fa-pen-to-square"></i>
-                                Edit</button>
-                            <a href="" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</a>
+                            <button type="button" class="btn btn-info btn-sm edit-expense-btn"
+                                data-expense-id="{{ expense[0] }}" data-title="{{ expense[2] }}"
+                                data-amount="{{ expense[3] }}">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+
+                            <button type="button" class="btn btn-danger btn-sm delete-expense-btn"
+                                data-expense-id="{{ expense[0] }}">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </button>
+
                         </td>
                     </tr>
                     {% endfor %}
@@ -81,7 +118,8 @@
     <script>
         $(document).ready(function () {
             $('#table_id').DataTable();
-
+            var expenseId;
+            //add
             $('#addExpenseModalBtn').click(function () {
                 $('#addExpenseModal').modal('show');
             });
@@ -89,30 +127,138 @@
             $('#addExpenseForm').submit(function (e) {
                 e.preventDefault();
 
-                var formData = $(this).serialize();
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to add a new expense',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'green',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Submit'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var formData = $(this).serialize();
 
-                $.ajax({
-                    url: '/add_expense',
-                    type: 'POST',
-                    data: formData,
-                    success: function (data) {
-                        $('#addExpenseModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: data.message,
-                            confirmButtonColor: 'green',
-                        }).then(function () {
-                            location.reload();
+                        $.ajax({
+                            url: '/add_expense',
+                            type: 'POST',
+                            data: formData,
+                            success: function (data) {
+                                $('#addExpenseModal').modal('hide');
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: data.message,
+                                    confirmButtonColor: 'green',
+                                }).then(function () {
+                                    location.reload();
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!'
+                                });
+                            }
                         });
-                    },
+                    }
+                });
+            });
 
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Something went wrong!'
+            //show expense details in modal
+            $('.edit-expense-btn').click(function () {
+                expenseId = $(this).data('expense-id');
+                console.log('expenseId:', expenseId);
+
+                var title = $(this).data('title');
+                var amount = $(this).data('amount');
+
+                $('#editTitle').val(title);
+                $('#editAmount').val(amount);
+
+                $('#editExpenseModal').modal('show');
+            });
+            //upon submit
+            $('#editExpenseForm').submit(function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to update this expense',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'green',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Update'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var formData = $(this).serialize();
+
+                        $.ajax({
+                            url: '/edit_expense/' + expenseId,
+                            type: 'POST',
+                            data: formData,
+                            success: function (data) {
+                                $('#editExpenseModal').modal('hide');
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: data.message,
+                                    confirmButtonColor: 'green',
+                                }).then(function () {
+                                    location.reload();
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            //delete
+            $('.delete-expense-btn').click(function () {
+                expenseId = $(this).data('expense-id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You won\'t be able to revert this!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Delete'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/delete_expense/' + expenseId,
+                            type: 'POST',
+                            success: function (data) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: data.message,
+                                    confirmButtonColor: 'green',
+                                }).then(function () {
+                                    location.reload();
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!'
+                                });
+                            }
                         });
                     }
                 });
