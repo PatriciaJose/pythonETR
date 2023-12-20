@@ -4,7 +4,7 @@ from flask import jsonify
 
 
 app = Flask(__name__)
-app.secret_key = 'hortalezaJose'  # Change this to a secure secret key
+app.secret_key = 'hortalezaJose'  
 
 # MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
@@ -14,7 +14,7 @@ app.config['MYSQL_DB'] = 'expense_tracker'
 
 mysql = MySQL(app)
 
-# Landing Page - Login
+
 # Landing Page - Login
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -33,7 +33,6 @@ def login():
             cursor.close()
 
             if user:
-                # Assuming user ID is the first element in the tuple
                 session['user_id'] = user[0]
                 return redirect(url_for('home'))
             else:
@@ -47,7 +46,7 @@ def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
 
-# Add this function to fetch expenses from the database
+# Fetch expenses from the database
 def get_expenses(user_id):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM expenses WHERE user_id = %s", (user_id,))
